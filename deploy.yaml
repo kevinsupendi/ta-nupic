@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ta-nupic
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        task: ta-nupic
+        k8s-app: ta-nupic
+    spec:
+      containers:
+      - name: anomaly
+        image: gcr.io/arkavidia-178003/ta-nupic:1.1
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    kubernetes.io/name: ta-nupic
+  name: ta-nupic
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+  - port: 8000
+    targetPort: 8000
+  selector:
+    k8s-app: ta-nupic

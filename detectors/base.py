@@ -19,14 +19,6 @@
 # ----------------------------------------------------------------------
 
 import abc
-import os
-import pandas
-import sys
-
-from datetime import datetime
-from util import createPath, getProbationPeriod
-
-
 
 class AnomalyDetector(object):
   """
@@ -35,16 +27,9 @@ class AnomalyDetector(object):
   """
   __metaclass__ = abc.ABCMeta
 
-  def __init__( self,
-                dataSet,
-                probationaryPercent):
-
-    self.dataSet = dataSet
-    self.probationaryPeriod = getProbationPeriod(
-      probationaryPercent, dataSet.shape[0])
-
-    self.inputMin = self.dataSet["value"].min()
-    self.inputMax = self.dataSet["value"].max()
+  def __init__(self):
+    self.inputMin = 0
+    self.inputMax = 0.1
 
 
   def initialize(self):
@@ -55,16 +40,6 @@ class AnomalyDetector(object):
     allows you to create objects within the pool itself to avoid this issue.
     """
     pass
-
-  def getAdditionalHeaders(self):
-    """
-    Returns a list of strings. Subclasses can add in additional columns per
-    record.
-
-    This method MAY be overridden to provide the names for those
-    columns.
-    """
-    return []
 
 
   @abc.abstractmethod
@@ -80,44 +55,14 @@ class AnomalyDetector(object):
     raise NotImplementedError
 
 
-  def getHeader(self):
-    """
-    Gets the outputPath and all the headers needed to write the results files.
-    """
-    headers = ["timestamp",
-                "value",
-                "anomaly_score"]
-
-    headers.extend(self.getAdditionalHeaders())
-
-    return headers
-
-
-  def run(self):
+  def run(self, dataRow):
     """
     Main function that is called to collect anomaly scores for a given file.
     """
+    inputData = dataRow
 
-    headers = self.getHeader()
-
-    rows = []
-    for i, row in self.dataSet.iterrows():
-
-      inputData = row.to_dict()
-
-      detectorValues = self.handleRecord(inputData)
-
-      outputRow = list(row) + list(detectorValues)
-
-      rows.append(outputRow)
-
-      # Progress report
-      if (i % 1000) == 0:
-        print ".",
-        sys.stdout.flush()
-
-    ans = pandas.DataFrame(rows, columns=headers)
-    return ans
+    detectorValues = self.handleRecord(inputData)
+    return detectorValues
 
 
 def detectDataSet(args):
@@ -127,21 +72,5 @@ def detectDataSet(args):
 
   @param args   (tuple)   Arguments to run a detector on a file and then
   """
-  (detectorInstance, detectorName, outputDir, relativePath) = args
-
-  relativeDir, fileName = os.path.split(relativePath)
-  fileName =  detectorName + "_" + fileName
-  outputPath = os.path.join(outputDir, detectorName, relativeDir, fileName)
-  createPath(outputPath)
-
-  print "Beginning detection with %s for %s" % \
-                                                (detectorName, relativePath)
-  detectorInstance.initialize()
-
-  results = detectorInstance.run()
-
-  results.to_csv(outputPath, index=False)
-
-  print "Completed processing %s records at %s" % \
-                                        (len(results.index), datetime.now())
-  print "Results have been written to %s" % (outputPath)
+  (detectorInstance, dataRow) = args
+  return detectorInstance.run(dataRow)

@@ -18,8 +18,6 @@
 # http://numenta.org/licenses/
 # ----------------------------------------------------------------------
 
-import math
-
 from nupic.algorithms import anomaly_likelihood
 from nupic.frameworks.opf.common_models.cluster_params import (
   getScalarMetricWithTimeOfDayAnomalyParams)
@@ -56,11 +54,6 @@ class NumentaDetector(AnomalyDetector):
     # useful for checking the efficacy of AnomalyLikelihood. You will need
     # to re-optimize the thresholds when running with this setting.
     self.useLikelihood = True
-
-
-  def getAdditionalHeaders(self):
-    """Returns a list of strings."""
-    return ["raw_score"]
 
 
   def handleRecord(self, inputData):
@@ -124,14 +117,8 @@ class NumentaDetector(AnomalyDetector):
 
     self.model.enableInference({"predictedField": "value"})
 
-    if self.useLikelihood:
-      # Initialize the anomaly likelihood object
-      numentaLearningPeriod = int(math.floor(self.probationaryPeriod / 2.0))
-      self.anomalyLikelihood = anomaly_likelihood.AnomalyLikelihood(
-        learningPeriod=numentaLearningPeriod,
-        estimationSamples=self.probationaryPeriod-numentaLearningPeriod,
-        reestimationPeriod=100
-      )
+    # Initialize the anomaly likelihood object
+    self.anomalyLikelihood = anomaly_likelihood.AnomalyLikelihood()
 
 
   def _setupEncoderParams(self, encoderParams):
