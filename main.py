@@ -40,4 +40,4 @@ if __name__ == '__main__':
         print result
         g1.set(result[0])
         g2.set(result[1])
-        time.sleep(1)
+        time.sleep(10)
