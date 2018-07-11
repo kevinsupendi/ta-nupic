@@ -14,7 +14,7 @@ def getDataRow():
     # prometheus_url = "http://35.240.222.157:30070/api/v1/query"
     # production
     prometheus_url = "http://prometheus-k8s.monitoring.svc:9090/api/v1/query"
-    expr = "sum by (container_name) (rate(container_cpu_usage_seconds_total{job=\"kubelet\", image!=\"\",container_name=\"nginx\"}[1m]))"
+    expr = "sum by (container_name) (rate(container_cpu_usage_seconds_total{job=\"kubelet\", image!=\"\",container_name=\"php-redis\"}[1m]))"
     r = requests.get(prometheus_url + "?query=" + expr)
     result = r.json()
     value = result['data']['result'][0]['value']
