@@ -1,5 +1,5 @@
 - job_name: 'ta-nupic'
-  scrape_interval: 10s
+  scrape_interval: 15s
   static_configs:
     - targets: ['ta-nupic.default.svc:8000']
       labels:

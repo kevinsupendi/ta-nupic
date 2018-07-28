@@ -19,6 +19,7 @@
 # ----------------------------------------------------------------------
 
 import abc
+import os
 
 class AnomalyDetector(object):
   """
@@ -28,8 +29,8 @@ class AnomalyDetector(object):
   __metaclass__ = abc.ABCMeta
 
   def __init__(self):
-    self.inputMin = 0
-    self.inputMax = 0.1
+    self.inputMin = float(os.environ.get('INPUT_MIN'))
+    self.inputMax = float(os.environ.get('INPUT_MAX'))
 
 
   def initialize(self):

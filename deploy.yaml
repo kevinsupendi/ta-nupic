@@ -13,7 +13,18 @@ spec:
     spec:
       containers:
       - name: anomaly
-        image: gcr.io/arkavidia-178003/ta-nupic:1.5
+        image: gcr.io/arkavidia-178003/ta-nupic:1.6
+        env:
+        - name: GAUGE1
+          value: "anomaly_score_test"
+        - name: GAUGE2
+          value: "raw_score_test"
+        - name: EXPR
+          value: "sum by (container_name) (rate(container_cpu_usage_seconds_total{job=\"kubelet\", image!=\"\",container_name=\"php-redis\"}[1m]))"
+        - name: INPUT_MIN
+          value: "0.0"
+        - name: INPUT_MAX
+          value: "0.3"
         ports:
         - containerPort: 8000
 ---
