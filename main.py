@@ -1,6 +1,7 @@
 from prometheus_client import start_http_server, Gauge
 from detectors.base import detectDataSet
 from detectors.numenta.numenta_detector import NumentaDetector
+from collections import deque
 import time
 import requests
 import datetime
@@ -36,6 +37,7 @@ if __name__ == '__main__':
     # Generate some requests.
     numenta = NumentaDetector()
     numenta.initialize()
+    d = deque(maxlen=1000)
     print "Debug:"
     print "Expression " + os.environ.get('EXPR')
     print "Gauge 1 " + os.environ.get('GAUGE1')
@@ -55,10 +57,7 @@ if __name__ == '__main__':
         g1.set(result[0])
         g2.set(result[1])
 
-        deq = numenta.anomalyLikelihood._historicalScores
-        timestamp, d, raw = zip(*deq)
-        d = list(d)
-        d[:] = [1-x for x in d]
+        d.append(1 - result[0])
         stdev = np.std(d, axis=0)
         gaussian = []
         for item in d:
