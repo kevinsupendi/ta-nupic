@@ -57,6 +57,7 @@ if __name__ == '__main__':
 
         deq = numenta.anomalyLikelihood._historicalScores
         timestamp, d, raw = zip(*deq)
+        d = list(d)
         d[:] = [1-x for x in d]
         stdev = np.std(d, axis=0)
         gaussian = []
