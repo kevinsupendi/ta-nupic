@@ -58,8 +58,8 @@ if __name__ == '__main__':
         g2.set(result[1])
 
         d.append(result[0])
-        filter_length = 10
-        sigma = 0.1
+        filter_length = 8
+        sigma = 2
         mid = filter_length / 2
         gaussian = [(1 / (sigma * np.sqrt(2 * np.pi))) * (1 / (np.exp((i ** 2) / (2 * sigma ** 2)))) for i in
                   range(-mid, mid + 1)]
