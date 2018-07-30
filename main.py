@@ -62,6 +62,8 @@ if __name__ == '__main__':
         for item in d:
             gau = np.exp(-np.power(item, 2.) / (2 * np.power(np.std(list(d), axis=0), 2.))) / (np.power(2 * np.pi, 0.5) * np.std(list(d), axis=0))
             gaussian.append(gau)
+        print d
+        print gaussian
         final = 1 - (2 * np.convolve(gaussian, d, 'same')[-1])
         g3.set(final)
         time.sleep(10)
