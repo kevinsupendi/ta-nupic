@@ -65,5 +65,6 @@ if __name__ == '__main__':
                   range(-mid, mid + 1)]
         gaussian[:] = [x / sum(gaussian) for x in gaussian]
         final = (np.convolve(gaussian, d, 'full'))
+        print final
         g3.set(final[-1])
         time.sleep(10)
