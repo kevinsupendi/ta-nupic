@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: anomaly
-        image: gcr.io/arkavidia-178003/ta-nupic:2.7
+        image: gcr.io/arkavidia-178003/ta-nupic:2.8
         env:
         - name: GAUGE1
           value: "anomaly_score_test"

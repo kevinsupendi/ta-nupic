@@ -64,7 +64,6 @@ if __name__ == '__main__':
         gaussian = [(1 / (sigma * np.sqrt(2 * np.pi))) * (1 / (np.exp((i ** 2) / (2 * sigma ** 2)))) for i in
                   range(-mid, mid + 1)]
         gaussian[:] = [x / sum(gaussian) for x in gaussian]
-
-        final = (np.convolve(gaussian, d, 'full')[-1])
-        g3.set(final)
+        final = (np.convolve(gaussian, d, 'full'))
+        g3.set(final[-1])
         time.sleep(10)
