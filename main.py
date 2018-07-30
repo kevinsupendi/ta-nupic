@@ -57,10 +57,11 @@ if __name__ == '__main__':
         g1.set(result[0])
         g2.set(result[1])
 
-        d.append(float(result[1]))
+        d.append(1 - float(result[0]))
+        stdev = result[2]
         gaussian = []
         for item in d:
-            gau = np.exp(-np.power(item, 2.) / (2 * np.power(np.std(list(d), axis=0), 2.))) / (np.power(2 * np.pi, 0.5) * np.std(list(d), axis=0))
+            gau = np.exp(-np.power(item, 2.) / (2 * np.power(stdev, 2.))) / (np.power(2 * np.pi, 0.5) * stdev)
             gaussian.append(gau)
         print d
         print gaussian
