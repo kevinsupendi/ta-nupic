@@ -96,7 +96,7 @@ class NumentaDetector(AnomalyDetector):
     if spatialAnomaly:
       finalScore = 1.0
 
-    stdev = self.anomalyLikelihood._distribution['distribution']['stdev']
+    stdev = 0 #self.anomalyLikelihood._distribution['distribution']['stdev']
     return (finalScore, rawScore, stdev)
 
 

@@ -46,6 +46,7 @@ if __name__ == '__main__':
     print "Input Min " + os.environ.get('INPUT_MIN')
     print "Input Max " + os.environ.get('INPUT_MAX')
     while True:
+        print numenta.anomalyLikelihood
         dataRow = getDataRow(expr)
         print dataRow
         args = (
