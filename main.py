@@ -58,13 +58,13 @@ if __name__ == '__main__':
         g2.set(result[1])
 
         d.append(result[0])
-        stdev = np.std(d, axis=0)
-        gaussian = []
-        for item in d:
-            gau = np.exp(-np.power(item, 2.) / (2 * np.power(stdev, 2.))) / (np.power(2 * np.pi, 0.5) * stdev)
-            gaussian.append(gau)
-        print "d : ", d
-        print "gaussian : ", gaussian
-        final = (np.convolve(gaussian, d, 'same')[-1])
+        filter_length = 10
+        sigma = 0.1
+        mid = filter_length / 2
+        gaussian = [(1 / (sigma * np.sqrt(2 * np.pi))) * (1 / (np.exp((i ** 2) / (2 * sigma ** 2)))) for i in
+                  range(-mid, mid + 1)]
+        gaussian[:] = [x / sum(gaussian) for x in gaussian]
+
+        final = (np.convolve(gaussian, d, 'full')[-1])
         g3.set(final)
         time.sleep(10)
