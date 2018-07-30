@@ -1,24 +1,29 @@
 from prometheus_client import start_http_server, Gauge
 from detectors.base import detectDataSet
 from detectors.numenta.numenta_detector import NumentaDetector
+from collections import deque
 import time
 import requests
 import datetime
 import os
+import numpy as np
 
 # Create a metric to track time spent and requests made.
 gauge1 = os.environ.get('GAUGE1')
 gauge2 = os.environ.get('GAUGE2')
+gauge3 = os.environ.get('GAUGE3')
 g1 = Gauge(gauge1, 'Anomaly Likelihood')
 g2 = Gauge(gauge2, 'Anomaly Raw Score')
+g3 = Gauge(gauge3, 'Convoluted Anomaly Likelihood')
+
 expr = os.environ.get('EXPR')#"sum by (container_name) (rate(container_cpu_usage_seconds_total{job=\"kubelet\", image!=\"\",container_name=\"php-redis\"}[1m]))"
 
-def getDataRow():
+def getDataRow(expression):
     # debug local
     # prometheus_url = "http://35.240.222.157:30070/api/v1/query"
     # production
     prometheus_url = "http://prometheus-k8s.monitoring.svc:9090/api/v1/query"
-    r = requests.get(prometheus_url + "?query=" + expr)
+    r = requests.get(prometheus_url + "?query=" + expression)
     result = r.json()
     value = result['data']['result'][0]['value']
     t = datetime.datetime.fromtimestamp(value[0])
@@ -32,14 +37,16 @@ if __name__ == '__main__':
     # Generate some requests.
     numenta = NumentaDetector()
     numenta.initialize()
+    d = deque(maxlen=10)
     print "Debug:"
     print "Expression " + os.environ.get('EXPR')
     print "Gauge 1 " + os.environ.get('GAUGE1')
     print "Gauge 2 " + os.environ.get('GAUGE2')
+    print "Gauge 3 " + os.environ.get('GAUGE3')
     print "Input Min " + os.environ.get('INPUT_MIN')
     print "Input Max " + os.environ.get('INPUT_MAX')
     while True:
-        dataRow = getDataRow()
+        dataRow = getDataRow(expr)
         print dataRow
         args = (
             numenta,
@@ -49,4 +56,12 @@ if __name__ == '__main__':
         print result
         g1.set(result[0])
         g2.set(result[1])
+
+        d.append(float(result[1]))
+        gaussian = []
+        for item in d:
+            gau = np.exp(-np.power(item, 2.) / (2 * np.power(np.std(list(d), axis=0), 2.))) / (np.power(2 * np.pi, 0.5) * np.std(list(d), axis=0))
+            gaussian.append(gau)
+        final = 1 - (2 * np.convolve(gaussian, d, 'same')[-1])
+        g3.set(final)
         time.sleep(10)
