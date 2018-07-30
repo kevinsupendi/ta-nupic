@@ -57,7 +57,7 @@ if __name__ == '__main__':
         g1.set(result[0])
         g2.set(result[1])
 
-        d.append(1 - result[0])
+        d.append(result[0])
         stdev = np.std(d, axis=0)
         gaussian = []
         for item in d:
@@ -65,6 +65,6 @@ if __name__ == '__main__':
             gaussian.append(gau)
         print "d : ", d
         print "gaussian : ", gaussian
-        final = 1 - (2 * np.convolve(gaussian, d, 'same')[-1])
+        final = (np.convolve(gaussian, d, 'same')[-1])
         g3.set(final)
         time.sleep(10)

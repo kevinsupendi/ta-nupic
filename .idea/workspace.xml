@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="64d9eaa4-5b24-4210-8ab3-6b86019d1301" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/deploy.yaml" afterPath="$PROJECT_DIR$/deploy.yaml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,8 +29,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
-              <caret line="65" column="23" lean-forward="true" selection-start-line="65" selection-start-column="23" selection-end-line="65" selection-end-column="23" />
+            <state relative-caret-position="400">
+              <caret line="67" column="54" lean-forward="true" selection-start-line="67" selection-start-column="54" selection-end-line="67" selection-end-column="54" />
               <folding>
                 <element signature="e#0#54#0" expanded="true" />
               </folding>
@@ -108,8 +107,8 @@
         <option value="$PROJECT_DIR$/Dockerfile" />
         <option value="$PROJECT_DIR$/detectors/base.py" />
         <option value="$PROJECT_DIR$/detectors/numenta/numenta_detector.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/deploy.yaml" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
@@ -337,7 +336,14 @@
       <option name="project" value="LOCAL" />
       <updated>1532961960325</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="change to q function">
+      <created>1532963810000</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1532963810000</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -381,7 +387,8 @@
     <MESSAGE value="use historical scores" />
     <MESSAGE value="fix calculation of Q function" />
     <MESSAGE value="convert tuple to list" />
-    <option name="LAST_COMMIT_MESSAGE" value="convert tuple to list" />
+    <MESSAGE value="change to q function" />
+    <option name="LAST_COMMIT_MESSAGE" value="change to q function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -752,8 +759,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="65" column="23" lean-forward="true" selection-start-line="65" selection-start-column="23" selection-end-line="65" selection-end-column="23" />
+        <state relative-caret-position="400">
+          <caret line="67" column="54" lean-forward="true" selection-start-line="67" selection-start-column="54" selection-end-line="67" selection-end-column="54" />
           <folding>
             <element signature="e#0#54#0" expanded="true" />
           </folding>
