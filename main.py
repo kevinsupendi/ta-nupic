@@ -12,10 +12,10 @@ import numpy as np
 gauge1 = os.environ.get('GAUGE1')
 gauge2 = os.environ.get('GAUGE2')
 gauge3 = os.environ.get('GAUGE3')
-gauge4 = os.environ.get('GAUGE4')
 g1 = Gauge(gauge1, 'Anomaly Likelihood')
 g2 = Gauge(gauge2, 'Anomaly Raw Score')
 g3 = Gauge(gauge3, 'Multiple Anomaly Likelihood')
+
 
 expr = os.environ.get('EXPR')#"sum by (container_name) (rate(container_cpu_usage_seconds_total{job=\"kubelet\", image!=\"\",container_name=\"php-redis\"}[1m]))"
 expr2 = os.environ.get('EXPR2')
@@ -38,9 +38,9 @@ if __name__ == '__main__':
     start_http_server(8000)
     # Generate some requests.
     numenta = NumentaDetector()
-    numenta.initialize()
+    numenta.initialize(os.environ.get('INPUT_MIN1'), os.environ.get('INPUT_MAX1'))
     numenta2 = NumentaDetector()
-    numenta2.initialize()
+    numenta2.initialize(os.environ.get('INPUT_MIN2'), os.environ.get('INPUT_MAX2'))
     d = deque(maxlen=1000)
     d2 = deque(maxlen=1000)
     print "Debug:"
@@ -49,8 +49,10 @@ if __name__ == '__main__':
     print "Gauge 1 " + os.environ.get('GAUGE1')
     print "Gauge 2 " + os.environ.get('GAUGE2')
     print "Gauge 3 " + os.environ.get('GAUGE3')
-    print "Input Min " + os.environ.get('INPUT_MIN')
-    print "Input Max " + os.environ.get('INPUT_MAX')
+    print "Input Min " + os.environ.get('INPUT_MIN1')
+    print "Input Max " + os.environ.get('INPUT_MAX1')
+    print "Input Min 2 " + os.environ.get('INPUT_MIN2')
+    print "Input Max 2 " + os.environ.get('INPUT_MAX2')
     while True:
         dataRow = getDataRow(expr)
         dataRow2 = getDataRow(expr2)

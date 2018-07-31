@@ -24,6 +24,7 @@ from nupic.frameworks.opf.common_models.cluster_params import (
 from nupic.frameworks.opf.model_factory import ModelFactory
 
 from detectors.base import AnomalyDetector
+import os
 
 # Fraction outside of the range of values seen so far that will be considered
 # a spatial anomaly regardless of the anomaly likelihood calculation. This
@@ -41,7 +42,6 @@ class NumentaDetector(AnomalyDetector):
   def __init__(self, *args, **kwargs):
 
     super(NumentaDetector, self).__init__(*args, **kwargs)
-
     self.model = None
     self.sensorParams = None
     self.anomalyLikelihood = None
@@ -99,8 +99,10 @@ class NumentaDetector(AnomalyDetector):
     return (finalScore, rawScore)
 
 
-  def initialize(self):
+  def initialize(self, inputMin, inputMax):
     # Get config params, setting the RDSE resolution
+    self.inputMin = inputMin
+    self.inputMax = inputMax
     rangePadding = abs(self.inputMax - self.inputMin) * 0.2
     modelParams = getScalarMetricWithTimeOfDayAnomalyParams(
       metricData=[0],

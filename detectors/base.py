@@ -19,7 +19,6 @@
 # ----------------------------------------------------------------------
 
 import abc
-import os
 
 class AnomalyDetector(object):
   """
@@ -29,11 +28,9 @@ class AnomalyDetector(object):
   __metaclass__ = abc.ABCMeta
 
   def __init__(self):
-    self.inputMin = float(os.environ.get('INPUT_MIN'))
-    self.inputMax = float(os.environ.get('INPUT_MAX'))
+    pass
 
-
-  def initialize(self):
+  def initialize(self, inputMin, inputMax):
     """Do anything to initialize your detector in before calling run.
 
     Pooling across cores forces a pickling operation when moving objects from
