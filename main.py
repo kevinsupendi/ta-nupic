@@ -38,9 +38,9 @@ if __name__ == '__main__':
     start_http_server(8000)
     # Generate some requests.
     numenta = NumentaDetector()
-    numenta.initialize(os.environ.get('INPUT_MIN1'), os.environ.get('INPUT_MAX1'))
+    numenta.initialize(float(os.environ.get('INPUT_MIN1')), float(os.environ.get('INPUT_MAX1')))
     numenta2 = NumentaDetector()
-    numenta2.initialize(os.environ.get('INPUT_MIN2'), os.environ.get('INPUT_MAX2'))
+    numenta2.initialize(float(os.environ.get('INPUT_MIN2')), float(os.environ.get('INPUT_MAX2')))
     d = deque(maxlen=1000)
     d2 = deque(maxlen=1000)
     print "Debug:"
