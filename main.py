@@ -12,11 +12,13 @@ import numpy as np
 gauge1 = os.environ.get('GAUGE1')
 gauge2 = os.environ.get('GAUGE2')
 gauge3 = os.environ.get('GAUGE3')
+gauge4 = os.environ.get('GAUGE4')
 g1 = Gauge(gauge1, 'Anomaly Likelihood')
 g2 = Gauge(gauge2, 'Anomaly Raw Score')
-g3 = Gauge(gauge3, 'Convoluted Anomaly Likelihood')
+g3 = Gauge(gauge3, 'Multiple Anomaly Likelihood')
 
 expr = os.environ.get('EXPR')#"sum by (container_name) (rate(container_cpu_usage_seconds_total{job=\"kubelet\", image!=\"\",container_name=\"php-redis\"}[1m]))"
+expr2 = os.environ.get('EXPR2')
 
 def getDataRow(expression):
     # debug local
@@ -37,9 +39,13 @@ if __name__ == '__main__':
     # Generate some requests.
     numenta = NumentaDetector()
     numenta.initialize()
+    numenta2 = NumentaDetector()
+    numenta2.initialize()
     d = deque(maxlen=1000)
+    d2 = deque(maxlen=1000)
     print "Debug:"
     print "Expression " + os.environ.get('EXPR')
+    print "Expression 2 " + os.environ.get('EXPR2')
     print "Gauge 1 " + os.environ.get('GAUGE1')
     print "Gauge 2 " + os.environ.get('GAUGE2')
     print "Gauge 3 " + os.environ.get('GAUGE3')
@@ -47,24 +53,30 @@ if __name__ == '__main__':
     print "Input Max " + os.environ.get('INPUT_MAX')
     while True:
         dataRow = getDataRow(expr)
+        dataRow2 = getDataRow(expr2)
         print dataRow
         args = (
             numenta,
             dataRow
         )
+        args2 = (
+            numenta2,
+            dataRow2
+        )
         result = detectDataSet(args)
         print result
+        result2 = detectDataSet(args2)
         g1.set(result[0])
         g2.set(result[1])
 
-        d.append(result[0])
+        d.append(1 - result[0])
+        d2.append(1 - result2[0])
         filter_length = 8
         sigma = 2
         mid = filter_length / 2
         gaussian = [(1 / (sigma * np.sqrt(2 * np.pi))) * (1 / (np.exp((i ** 2) / (2 * sigma ** 2)))) for i in
                   range(-mid, mid + 1)]
         gaussian[:] = [x / sum(gaussian) for x in gaussian]
-        final = (np.convolve(gaussian, d, 'valid'))
-        print final
-        g3.set(final[-1])
+        final = 1 - (np.convolve(gaussian, d, 'valid'))[-1] * (np.convolve(gaussian, d2, 'valid'))[-1]
+        g3.set(final)
         time.sleep(10)
